@@ -1,0 +1,3 @@
+import {env} from 'cloudflare:workers';
+import {database} from '@/lib/storage';
+export async function GET(_req:Request,{params}:{params:Promise<{id:string}>}){try{const {id}=await params;const row=await database().prepare('SELECT payload FROM workspace WHERE id=?').bind('main').first<{payload:string}>();if(!row||!JSON.parse(row.payload).certificates?.some((c:any)=>c.id===id))return new Response('Certificate not found',{status:404});const obj=await env.BUCKET?.get(id);if(!obj)return new Response('Certificate unavailable',{status:404});return new Response(obj.body,{headers:{'Content-Type':'application/pdf','Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});}catch{return new Response('Certificate storage unavailable',{status:503});}}
