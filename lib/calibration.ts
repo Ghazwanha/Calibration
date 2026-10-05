@@ -38,7 +38,7 @@ export function calculate(points:Point[],q:RequestPoint,era:string):Calculation{
  if(!low||!high)return no('Outside the measured interval. Extrapolation is disabled.');
  if(low.review||high.review)return no('A bracketing record needs source review.');
  if(low.nominal<0&&high.nominal>0)return no('Interpolation across zero is disabled.');
- const uSource=low.uncertainty!==null&&high.uncertainty!==null&&low.k===high.k?(low.uncertainty>=high.uncertainty?low:high):null;
+ const uSource = high.uncertainty !== null ? high : null;;
  return {status:'interpolated',reason:low.range===high.range?'Linear interpolation within the same range and frequency':'Cross-range linear interpolation (user-selected method): '+low.range+' → '+high.range+'; same function, frequency and connection',error:linear(x,low.nominal,error(low),high.nominal,error(high))/units[q.unit],uncertainty:uSource?uSource.uncertainty!/units[q.unit]:null,k:uSource?.k??null,used:[low,high],uSource};
 }
 export const fmt=(n:number|null,d=8)=>n===null?'—':n!==0&&Math.abs(n)<10**(-d)?n.toExponential(5):n.toFixed(d).replace(/(\.\d*?[1-9])0+$|\.0+$/,'$1');
