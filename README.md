@@ -20,3 +20,4 @@ D1 stores the shared owner-private workspace, source overrides and edit archive.
 `node node_modules/typescript/bin/tsc --noEmit`
 
 Use Sites bundled build and hosting workflow. Production applies the schema migration before uploading the Worker. For local preview apply the migration once using the generated Wrangler configuration and `.wrangler/state`.
+Deployment update
